@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
+#[Route('/api', name: 'api')]
 class RegisterController extends AbstractController
 {
 
@@ -44,6 +45,6 @@ class RegisterController extends AbstractController
         $entityManager->persist($user);
         $entityManager->flush();
 
-        return $this->json(data: 'User created', status: Response::HTTP_CREATED);
+        return $this->json(data: ['message' => 'Registered Successfully'], status: Response::HTTP_CREATED);
     }
 }

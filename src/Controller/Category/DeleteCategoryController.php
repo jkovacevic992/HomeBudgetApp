@@ -1,9 +1,8 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Category;
 
 use App\Repository\CategoryRepositoryInterface;
-use PHPUnit\Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;

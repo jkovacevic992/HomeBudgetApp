@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\User;
 
 use App\Entity\User;
 use Doctrine\Persistence\ManagerRegistry;
@@ -19,8 +19,8 @@ class RegisterController extends AbstractController
      * @param UserPasswordHasherInterface $passwordHasher
      */
     public function __construct(
-        public ManagerRegistry $managerRegistry,
-        public UserPasswordHasherInterface $passwordHasher
+        private readonly ManagerRegistry    $managerRegistry,
+        private readonly UserPasswordHasherInterface $passwordHasher
     ){}
 
     /**

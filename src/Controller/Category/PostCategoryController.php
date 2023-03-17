@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Category;
 
 use App\Factory\CategoryFactory;
 use App\Repository\CategoryRepositoryInterface;
@@ -24,7 +24,7 @@ class PostCategoryController extends AbstractController
      * @param Request $request
      * @return JsonResponse
      */
-    #[Route('/api/category', name: 'app_post_category', methods: ['POST'])]
+    #[Route('/api/add/category', name: 'app_post_category', methods: ['POST'])]
     public function index(Request $request): JsonResponse
     {
         $data = json_decode(json: $request->getContent(), associative: true);

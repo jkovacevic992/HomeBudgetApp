@@ -37,7 +37,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private Collection $expenses;
 
     #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2)]
-    private ?string $balance = null;
+    private float|string $balance = 5000.00;
 
     public function __construct()
     {
@@ -130,17 +130,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * @return string|null
+     * @return string|float
      */
-    public function getBalance(): ?string
+    public function getBalance(): float|string
     {
         return $this->balance;
     }
 
     /**
-     * @param string|null $balance
+     * @param string|float $balance
      */
-    public function setBalance(?string $balance): void
+    public function setBalance(float|string $balance): void
     {
         $this->balance = $balance;
     }

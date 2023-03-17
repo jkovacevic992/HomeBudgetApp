@@ -14,9 +14,9 @@ class GetCategoriesController extends AbstractController
     }
 
     #[Route('/api/categories', name: 'app_get_categories', methods: ['GET'])]
-    public function index(): JsonResponse
+    public function get(): JsonResponse
     {
         $data = $this->categoryRepository->findAll();
-        return $this->json($data);
+        return $this->json(data: $data);
     }
 }

@@ -33,12 +33,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Earnings::class)]
     private Collection $earnings;
 
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Expense::class)]
+    private Collection $expenses;
+
     #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2)]
     private ?string $balance = null;
 
     public function __construct()
     {
         $this->earnings = new ArrayCollection();
+        $this->expenses = new ArrayCollection();
     }
 
     /**
@@ -123,5 +127,21 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getBalance(): ?string
+    {
+        return $this->balance;
+    }
+
+    /**
+     * @param string|null $balance
+     */
+    public function setBalance(?string $balance): void
+    {
+        $this->balance = $balance;
     }
 }

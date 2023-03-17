@@ -27,7 +27,7 @@ class Earnings
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id')]
     private User $user;
 
-    #[ORM\Column(type: 'datetime')]
+    #[ORM\Column(name: 'created_at', type: 'datetime')]
     private ?DateTimeInterface $createdAt = null;
 
     #[ORM\PrePersist]

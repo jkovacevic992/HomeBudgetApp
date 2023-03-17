@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\Category;
+namespace App\Controller\Earnings\Controller\Category;
 
 use App\Repository\CategoryRepositoryInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -16,8 +16,7 @@ class DeleteCategoryController extends AbstractController
      * @param CategoryRepositoryInterface $categoryRepository
      */
     public function __construct(private CategoryRepositoryInterface $categoryRepository)
-    {
-    }
+    {}
 
     /**
      * @param Request $request
@@ -29,7 +28,7 @@ class DeleteCategoryController extends AbstractController
         $data = json_decode(json: $request->getContent(), associative: true);
 
         try {
-            $category  = $this->categoryRepository->find($data['id']);
+            $category  = $this->categoryRepository->find(id: $data['id']);
             if ($category) {
                 $this->categoryRepository->remove(entity: $category, flush: true);
                 return $this->json(

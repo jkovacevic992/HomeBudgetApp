@@ -14,7 +14,7 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method Earnings[]    findAll()
  * @method Earnings[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class EarningsRepository extends ServiceEntityRepository
+class EarningsRepository extends ServiceEntityRepository implements EarningsRepositoryInterface
 {
     public function __construct(ManagerRegistry $registry)
     {
@@ -39,20 +39,19 @@ class EarningsRepository extends ServiceEntityRepository
         }
     }
 
-//    /**
-//     * @return Earnings[] Returns an array of Earnings objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('e')
-//            ->andWhere('e.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('e.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    /**
+     * @return Earnings[] Returns an array of Earnings objects
+     */
+    public function findByUserId(int $userId): array
+    {
+        return $this->createQueryBuilder('e')
+            ->select('e.id', 'e.amount', 'e.description', 'e.createdAt')
+           ->andWhere('e.user = :val')
+            ->setParameter('val', $userId)
+            ->orderBy('e.id', 'ASC')
+           ->getQuery()
+           ->getResult();
+    }
 
 //    public function findOneBySomeField($value): ?Earnings
 //    {

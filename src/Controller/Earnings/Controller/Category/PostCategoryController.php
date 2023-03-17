@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\Category;
+namespace App\Controller\Earnings\Controller\Category;
 
 use App\Factory\CategoryFactory;
 use App\Repository\CategoryRepositoryInterface;

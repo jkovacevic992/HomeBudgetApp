@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Controller\Category;
+namespace App\Controller\Earnings\Controller\Category;
 
 use App\Repository\CategoryRepositoryInterface;
+use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -15,7 +16,7 @@ class UpdateCategoryController extends AbstractController
     /**
      * @param CategoryRepositoryInterface $categoryRepository
      */
-    public function __construct(private CategoryRepositoryInterface $categoryRepository)
+    public function __construct(private readonly CategoryRepositoryInterface $categoryRepository)
     {
     }
 
@@ -33,7 +34,7 @@ class UpdateCategoryController extends AbstractController
 
         try {
             $this->categoryRepository->save(entity: $category, flush: true);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return $this->json(data: ['message' => 'Error when trying to update category'],
                 status: Response::HTTP_BAD_REQUEST);
         }

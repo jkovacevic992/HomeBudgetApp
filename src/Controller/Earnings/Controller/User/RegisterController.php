@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\User;
+namespace App\Controller\Earnings\Controller\User;
 
 use App\Entity\User;
 use Doctrine\Persistence\ManagerRegistry;

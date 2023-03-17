@@ -14,7 +14,7 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method Expense[]    findAll()
  * @method Expense[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class ExpenseRepository extends ServiceEntityRepository
+class ExpenseRepository extends ServiceEntityRepository implements ExpenseRepositoryInterface
 {
     public function __construct(ManagerRegistry $registry)
     {
@@ -39,20 +39,20 @@ class ExpenseRepository extends ServiceEntityRepository
         }
     }
 
-//    /**
-//     * @return Expense[] Returns an array of Expense objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('e')
-//            ->andWhere('e.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('e.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    /**
+     * @param int $userId
+     * @return array
+     */
+    public function findByUserId(int $userId): array
+    {
+        return $this->createQueryBuilder('e')
+            ->select('e.id', 'e.amount', 'e.description', 'e.createdAt', 'e.category')
+            ->andWhere('e.user = :val')
+            ->setParameter('val', $userId)
+            ->orderBy('e.id', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
 
 //    public function findOneBySomeField($value): ?Expense
 //    {

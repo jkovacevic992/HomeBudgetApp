@@ -3,10 +3,13 @@
 namespace App\Entity;
 
 use App\Repository\ExpenseRepository;
+use DateTimeImmutable;
+use DateTimeInterface;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ExpenseRepository::class)]
+#[ORM\HasLifecycleCallbacks]
 class Expense
 {
     #[ORM\Id]
@@ -27,6 +30,15 @@ class Expense
     #[ORM\ManyToOne(targetEntity: Category::class, inversedBy: 'expenses')]
     #[ORM\JoinColumn(name: 'category_id', referencedColumnName: 'id')]
     private Category $category;
+
+    #[ORM\Column(name: 'created_at', type: 'datetime')]
+    private ?DateTimeInterface $createdAt = null;
+
+    #[ORM\PrePersist]
+    public function setCreatedAtValue(): void
+    {
+        $this->createdAt = new DateTimeImmutable();
+    }
 
     public function getId(): ?int
     {
@@ -87,5 +99,21 @@ class Expense
     public function setCategory(Category $category): void
     {
         $this->category = $category;
+    }
+
+    /**
+     * @return DateTimeInterface|null
+     */
+    public function getCreatedAt(): ?DateTimeInterface
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * @param DateTimeInterface|null $createdAt
+     */
+    public function setCreatedAt(?DateTimeInterface $createdAt): void
+    {
+        $this->createdAt = $createdAt;
     }
 }

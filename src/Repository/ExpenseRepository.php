@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Category;
 use App\Entity\Expense;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -46,21 +47,54 @@ class ExpenseRepository extends ServiceEntityRepository implements ExpenseReposi
     public function findByUserId(int $userId): array
     {
         return $this->createQueryBuilder('e')
-            ->select('e.id', 'e.amount', 'e.description', 'e.createdAt', 'e.category')
             ->andWhere('e.user = :val')
             ->setParameter('val', $userId)
-            ->orderBy('e.id', 'ASC')
+            ->leftJoin('e.category', 'c')
+            ->addSelect('c')
             ->getQuery()
-            ->getResult();
+            ->getArrayResult();
     }
 
-//    public function findOneBySomeField($value): ?Expense
-//    {
-//        return $this->createQueryBuilder('e')
-//            ->andWhere('e.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+    /**
+     * @param int $userId
+     * @param int|null $category
+     * @param float|null $min
+     * @param float|null $max
+     * @param string|null $date
+     * @return array
+     */
+    public function findExpenses(int $userId, int $category = null, float $min = null, float $max = null, string $date = null): array
+    {
+        $qb = $this->createQueryBuilder('e')
+            ->leftJoin('e.category', 'c')
+            ->addSelect('c')
+            ->andWhere('e.user = :user')
+            ->setParameter('user', $userId);
+
+        if ($category) {
+            $qb->andWhere('e.category = :category')
+                ->setParameter('category', $category);
+        }
+
+        if ($date) {
+            $qb->andWhere('DATE(e.createdAt) = :date')
+                ->setParameter('date', $date);
+        }
+
+        if ($min) {
+            $qb->andWhere('e.amount > :min')
+                ->setParameter('min', $min);
+        }
+
+        if ($max) {
+            $qb->andWhere('e.amount < :max')
+                ->setParameter('max', $max);
+        }
+
+
+
+        return $qb->orderBy('e.id', 'ASC')
+            ->getQuery()
+            ->getArrayResult();
+    }
 }

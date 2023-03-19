@@ -1,20 +1,21 @@
 <?php
 
-namespace App\Controller\Earnings\Controller\Expense;
+namespace App\Controller\Expense;
 
 use App\Entity\User;
-use App\Factory\ExpenseFactory;
 use App\Repository\CategoryRepositoryInterface;
 use App\Repository\ExpenseRepositoryInterface;
 use App\Repository\UserRepositoryInterface;
+use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-class AddExpenseController extends AbstractController
+class UpdateExpenseController extends AbstractController
 {
+
     /**
      * @param ExpenseRepositoryInterface $expenseRepository
      * @param UserRepositoryInterface $userRepository
@@ -32,7 +33,7 @@ class AddExpenseController extends AbstractController
      * @param Request $request
      * @return JsonResponse
      */
-    #[Route('/api/add/expense', name: 'app_add_expense_controller', methods: ['POST'])]
+    #[Route('/api/update/expense', name: 'app_update_expense', methods: ['PUT'])]
     public function index(Request $request): JsonResponse
     {
         $data = json_decode(json: $request->getContent(), associative: true);
@@ -40,25 +41,41 @@ class AddExpenseController extends AbstractController
         /** @var User $user */
         $user = $this->getUser();
 
-        $expense = ExpenseFactory::create();
-        $expense->setDescription($data['description']);
-        $expense->setUser($user);
-        $expense->setCategory($this->categoryRepository->find($data['category_id']));
-        $expense->setAmount($data['amount']);
+        $expense = $this->expenseRepository->find($data['id']);
 
-        $user->setBalance(balance: $user->getBalance() - $data['amount']);
+        if (array_key_exists(key: 'amount', array: $data)) {
+            $diff = $data['amount'] - $expense->getAmount();
+            if ($diff !== 0) {
+                $expense->setAmount(amount: $data['amount']);
+                $user->setBalance(balance: $user->getBalance() - $diff);
+                try {
+                    $this->userRepository->save(entity: $user, flush: true);
+                } catch (Exception $e) {
+                    return $this->json(
+                        data: ['message' => 'Error when trying to update expense. User balance cannot be updated.'],
+                        status: Response::HTTP_BAD_REQUEST
+                    );
+                }
+            }
+        }
+
+        if (array_key_exists('description', $data)) {
+            $expense->setDescription($data['description']);
+        }
+
+        if (array_key_exists('category_id', $data)) {
+            $expense->setCategory($this->categoryRepository->find($data['category_id']));
+        }
 
         try {
             $this->expenseRepository->save(entity: $expense, flush: true);
-            $this->userRepository->save(entity:  $user, flush: true);
-        } catch (\Exception $exception) {
+        } catch (Exception $e) {
             return $this->json(
-                data: ['message' => 'Error when trying to add expense'],
+                data: ['message' => 'Error when trying to update expense'],
                 status: Response::HTTP_BAD_REQUEST);
         }
-
         return $this->json(
-            data: ['message' => 'Added new expense successfully'],
+            data: ['message' => 'Successful expense update!'],
             status: Response::HTTP_CREATED
         );
     }

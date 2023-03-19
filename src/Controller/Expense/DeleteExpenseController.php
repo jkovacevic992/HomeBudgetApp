@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\Earnings\Controller\Expense;
+namespace App\Controller\Expense;
 
 use App\Entity\User;
 use App\Repository\ExpenseRepositoryInterface;

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\Earnings\Controller\Category;
+namespace App\Controller\Category;
 
 use App\Repository\CategoryRepositoryInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;

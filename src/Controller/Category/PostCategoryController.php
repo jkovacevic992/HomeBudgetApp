@@ -1,22 +1,22 @@
 <?php
 
-namespace App\Controller\Earnings\Controller\Category;
+namespace App\Controller\Category;
 
+use App\Factory\CategoryFactory;
 use App\Repository\CategoryRepositoryInterface;
-use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-class UpdateCategoryController extends AbstractController
+class PostCategoryController extends AbstractController
 {
 
     /**
      * @param CategoryRepositoryInterface $categoryRepository
      */
-    public function __construct(private readonly CategoryRepositoryInterface $categoryRepository)
+    public function __construct(private CategoryRepositoryInterface $categoryRepository)
     {
     }
 
@@ -24,23 +24,24 @@ class UpdateCategoryController extends AbstractController
      * @param Request $request
      * @return JsonResponse
      */
-    #[Route('/api/update/category', name: 'app_update_category', methods: ['PUT'])]
-    public function update(Request $request): JsonResponse
+    #[Route('/api/add/category', name: 'app_post_category', methods: ['POST'])]
+    public function index(Request $request): JsonResponse
     {
         $data = json_decode(json: $request->getContent(), associative: true);
 
-        $category = $this->categoryRepository->find(id: $data['id']);
-        $category->setName(name: $data['name']);
+        $category = CategoryFactory::create();
+        $category->setName($data['name']);
 
         try {
             $this->categoryRepository->save(entity: $category, flush: true);
-        } catch (Exception $e) {
-            return $this->json(data: ['message' => 'Error when trying to update category'],
+        } catch (\Exception $exception) {
+            return $this->json(
+                data: ['message' => 'Error when trying to create category'],
                 status: Response::HTTP_BAD_REQUEST);
         }
 
         return $this->json(
-            data: ['message' => 'Successful category update!'],
+            data: ['message' => 'Created new category successfully'],
             status: Response::HTTP_CREATED
         );
     }

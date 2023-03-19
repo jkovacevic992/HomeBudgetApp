@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\Earnings\Controller\Earnings;
+namespace App\Controller\Earnings;
 
 use App\Entity\User;
 use App\Factory\EarningsFactory;

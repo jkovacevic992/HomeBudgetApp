@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Controller\Earnings\Controller\User;
+namespace App\Controller\User;
 
-use App\Entity\User;
+use App\Factory\UserFactory;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -33,7 +33,7 @@ class RegisterController extends AbstractController
     {
         $data = json_decode($request->getContent(), associative: true);
 
-        $user = new User();
+        $user = UserFactory::create();
         $user->setEmail($data['email']);
         $hashedPassword = $this->passwordHasher->hashPassword(
             user: $user,

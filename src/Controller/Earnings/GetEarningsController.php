@@ -1,12 +1,11 @@
 <?php
 
-namespace App\Controller\Earnings\Controller\Earnings;
+namespace App\Controller\Earnings;
 
 use App\Entity\User;
 use App\Repository\EarningsRepositoryInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class GetEarningsController extends AbstractController

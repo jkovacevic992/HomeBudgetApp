@@ -59,7 +59,7 @@ class RegisterController extends AbstractController
         } catch (\Exception $e) {
             return $this->json(
                 data: ['message' => 'Could not register new user.'],
-                status: Response::HTTP_CREATED);
+                status: Response::HTTP_BAD_REQUEST);
         }
 
 

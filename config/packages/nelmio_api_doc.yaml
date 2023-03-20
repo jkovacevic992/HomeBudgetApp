@@ -526,7 +526,7 @@ nelmio_api_doc:
             get:
               tags:
                 - aggregation
-              summary: Get total expenses per category in the last month or year
+              summary: Get total expenses per category. Can be filtered for the last month or year
               security:
                 - bearerAuth: [ ]
               parameters:

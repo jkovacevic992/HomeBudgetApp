@@ -11,7 +11,6 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class GetExpensesController extends AbstractController
 {
-
     /**
      * @param ExpenseRepositoryInterface $expenseRepository
      */

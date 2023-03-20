@@ -12,7 +12,6 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class DeleteCategoryController extends AbstractController
 {
-
     /**
      * @param CategoryRepositoryInterface $categoryRepository
      * @param CategoryValidator $categoryValidator
@@ -20,8 +19,8 @@ class DeleteCategoryController extends AbstractController
     public function __construct(
         private readonly CategoryRepositoryInterface $categoryRepository,
         private readonly CategoryValidator $categoryValidator
-    )
-    {}
+    ) {
+    }
 
     /**
      * @param Request $request
@@ -53,11 +52,13 @@ class DeleteCategoryController extends AbstractController
         } catch (\Exception $e) {
             return $this->json(
                 data: ['message' => 'Could not delete category.'],
-                status: Response::HTTP_BAD_REQUEST);
+                status: Response::HTTP_BAD_REQUEST
+            );
         }
 
         return $this->json(
             data: ['message' => 'No category with that ID.'],
-            status: Response::HTTP_BAD_REQUEST);
+            status: Response::HTTP_BAD_REQUEST
+        );
     }
 }

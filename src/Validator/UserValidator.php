@@ -11,7 +11,6 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class UserValidator
 {
-
     /**
      * @param ValidatorInterface $validator
      */

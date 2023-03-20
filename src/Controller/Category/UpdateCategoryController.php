@@ -13,7 +13,6 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class UpdateCategoryController extends AbstractController
 {
-
     /**
      * @param CategoryRepositoryInterface $categoryRepository
      * @param CategoryValidator $categoryValidator
@@ -21,8 +20,7 @@ class UpdateCategoryController extends AbstractController
     public function __construct(
         private readonly CategoryRepositoryInterface $categoryRepository,
         private readonly CategoryValidator $categoryValidator
-    )
-    {
+    ) {
     }
 
     /**
@@ -52,11 +50,15 @@ class UpdateCategoryController extends AbstractController
                     status: Response::HTTP_CREATED
                 );
             }
-            return $this->json(data: ['message' => 'Could not find category.'],
-                status: Response::HTTP_BAD_REQUEST);
+            return $this->json(
+                data: ['message' => 'Could not find category.'],
+                status: Response::HTTP_BAD_REQUEST
+            );
         } catch (Exception $e) {
-            return $this->json(data: ['message' => 'Error when trying to update category'],
-                status: Response::HTTP_BAD_REQUEST);
+            return $this->json(
+                data: ['message' => 'Error when trying to update category'],
+                status: Response::HTTP_BAD_REQUEST
+            );
         }
     }
 }

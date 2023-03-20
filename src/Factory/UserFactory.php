@@ -9,7 +9,7 @@ class UserFactory
     /**
      * @return User
      */
-    public static function create() : User
+    public static function create(): User
     {
         return new User();
     }

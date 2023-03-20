@@ -13,7 +13,6 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class PostCategoryController extends AbstractController
 {
-
     /**
      * @param CategoryRepositoryInterface $categoryRepository
      * @param CategoryValidator $categoryValidator
@@ -48,7 +47,8 @@ class PostCategoryController extends AbstractController
         } catch (\Exception $exception) {
             return $this->json(
                 data: ['message' => 'Error when trying to save category'],
-                status: Response::HTTP_BAD_REQUEST);
+                status: Response::HTTP_BAD_REQUEST
+            );
         }
 
         return $this->json(

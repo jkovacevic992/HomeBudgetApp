@@ -23,7 +23,8 @@ class AddEarningsController extends AbstractController
         private readonly EarningsRepositoryInterface $earningsRepository,
         private readonly UserRepositoryInterface $userRepository,
         private readonly EarningsValidator $validator
-    ){}
+    ) {
+    }
 
     /**
      * @param Request $request
@@ -59,7 +60,8 @@ class AddEarningsController extends AbstractController
         } catch (\Exception $exception) {
             return $this->json(
                 data: ['message' => 'Error when trying to add earnings'],
-                status: Response::HTTP_BAD_REQUEST);
+                status: Response::HTTP_BAD_REQUEST
+            );
         }
 
         return $this->json(

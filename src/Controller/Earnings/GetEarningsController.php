@@ -10,7 +10,6 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class GetEarningsController extends AbstractController
 {
-
     /**
      * @param EarningsRepositoryInterface $earningsRepository
      */

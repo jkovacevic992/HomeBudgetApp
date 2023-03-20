@@ -14,7 +14,6 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class DeleteExpenseController extends AbstractController
 {
-
     /**
      * @param ExpenseRepositoryInterface $expenseRepository
      * @param UserRepositoryInterface $userRepository
@@ -24,8 +23,7 @@ class DeleteExpenseController extends AbstractController
         private readonly ExpenseRepositoryInterface $expenseRepository,
         private readonly UserRepositoryInterface $userRepository,
         private readonly EarningsValidator $earningsValidator
-    )
-    {
+    ) {
     }
 
     #[Route('/api/delete/expense', name: 'app_delete_expense', methods: ['DELETE'])]
@@ -55,11 +53,15 @@ class DeleteExpenseController extends AbstractController
                     status: Response::HTTP_CREATED
                 );
             }
-            return $this->json(data: ['message' => 'No expense with that ID.'],
-                status: Response::HTTP_BAD_REQUEST);
+            return $this->json(
+                data: ['message' => 'No expense with that ID.'],
+                status: Response::HTTP_BAD_REQUEST
+            );
         } catch (\Exception $e) {
-            return $this->json(data: ['message' => 'Could not delete expense.'],
-                status: Response::HTTP_BAD_REQUEST);
+            return $this->json(
+                data: ['message' => 'Could not delete expense.'],
+                status: Response::HTTP_BAD_REQUEST
+            );
         }
     }
 }

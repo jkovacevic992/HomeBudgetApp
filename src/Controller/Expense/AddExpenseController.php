@@ -27,8 +27,7 @@ class AddExpenseController extends AbstractController
         private readonly UserRepositoryInterface $userRepository,
         private readonly CategoryRepositoryInterface $categoryRepository,
         private readonly ExpenseValidator $expenseValidator
-    )
-    {
+    ) {
     }
 
     /**
@@ -52,7 +51,8 @@ class AddExpenseController extends AbstractController
         if (!$category) {
             return $this->json(
                 data: ['message' => 'No category with that ID.'],
-                status: Response::HTTP_BAD_REQUEST);
+                status: Response::HTTP_BAD_REQUEST
+            );
         }
         $expense = ExpenseFactory::create();
         $expense->setDescription($data['description']);
@@ -68,7 +68,8 @@ class AddExpenseController extends AbstractController
         } catch (\Exception $exception) {
             return $this->json(
                 data: ['message' => 'Error when trying to add expense'],
-                status: Response::HTTP_BAD_REQUEST);
+                status: Response::HTTP_BAD_REQUEST
+            );
         }
 
         return $this->json(

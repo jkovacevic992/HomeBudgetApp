@@ -78,5 +78,4 @@ class ExpenseValidator
         $constraints->missingFieldsMessage = 'Missing a required field.';
         return $this->validator->validate($data, $constraints);
     }
-
 }

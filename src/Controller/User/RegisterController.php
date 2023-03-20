@@ -14,7 +14,6 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route('/api', name: 'api')]
 class RegisterController extends AbstractController
 {
-
     /**
      * @param ManagerRegistry $managerRegistry
      * @param UserPasswordHasherInterface $passwordHasher
@@ -24,7 +23,8 @@ class RegisterController extends AbstractController
         private readonly ManagerRegistry    $managerRegistry,
         private readonly UserPasswordHasherInterface $passwordHasher,
         private readonly UserValidator $userValidator
-    ){}
+    ) {
+    }
 
     /**
      * Method used to register the user using data from request
@@ -59,7 +59,8 @@ class RegisterController extends AbstractController
         } catch (\Exception $e) {
             return $this->json(
                 data: ['message' => 'Could not register new user.'],
-                status: Response::HTTP_BAD_REQUEST);
+                status: Response::HTTP_BAD_REQUEST
+            );
         }
 
 

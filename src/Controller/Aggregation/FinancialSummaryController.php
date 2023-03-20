@@ -28,7 +28,7 @@ class FinancialSummaryController extends AbstractController
         $requestData = $request->query->all();
         $from = null;
         $to = null;
-        if(!array_key_exists('from', $requestData) && !array_key_exists('to', $requestData)) {
+        if (!array_key_exists('from', $requestData) && !array_key_exists('to', $requestData)) {
             return $this->json(
                 data: 'Either "from" or "to" required in the request.',
                 status: Response::HTTP_BAD_REQUEST
@@ -41,7 +41,7 @@ class FinancialSummaryController extends AbstractController
             $to = $requestData['to'];
         }
 
-        $finances = $this->dataAggregationService->getExpensesAndEarningsForPeriod(from: $from,to: $to);
+        $finances = $this->dataAggregationService->getExpensesAndEarningsForPeriod(from: $from, to: $to);
 
         return $this->json(data: $finances);
     }

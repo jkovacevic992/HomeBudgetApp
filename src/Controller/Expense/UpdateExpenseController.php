@@ -16,7 +16,6 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class UpdateExpenseController extends AbstractController
 {
-
     /**
      * @param ExpenseRepositoryInterface $expenseRepository
      * @param UserRepositoryInterface $userRepository
@@ -28,8 +27,7 @@ class UpdateExpenseController extends AbstractController
         private readonly UserRepositoryInterface $userRepository,
         private readonly CategoryRepositoryInterface $categoryRepository,
         private readonly ExpenseValidator $expenseValidator
-    )
-    {
+    ) {
     }
 
     /**
@@ -53,10 +51,11 @@ class UpdateExpenseController extends AbstractController
         $user = $this->getUser();
 
         $expense = $this->expenseRepository->find($data['id']);
-        if(!$expense) {
+        if (!$expense) {
             return $this->json(
                 data: ['message' => 'No expense with that ID.'],
-                status: Response::HTTP_BAD_REQUEST);
+                status: Response::HTTP_BAD_REQUEST
+            );
         }
 
         if (array_key_exists(key: 'amount', array: $data)) {
@@ -86,7 +85,8 @@ class UpdateExpenseController extends AbstractController
             if (!$category) {
                 return $this->json(
                     data: ['message' => 'No category with that ID.'],
-                    status: Response::HTTP_BAD_REQUEST);
+                    status: Response::HTTP_BAD_REQUEST
+                );
             }
             $expense->setCategory($category);
         }
@@ -100,7 +100,8 @@ class UpdateExpenseController extends AbstractController
         } catch (Exception $e) {
             return $this->json(
                 data: ['message' => 'Error when trying to update expense'],
-                status: Response::HTTP_BAD_REQUEST);
+                status: Response::HTTP_BAD_REQUEST
+            );
         }
     }
 }

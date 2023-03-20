@@ -13,5 +13,4 @@ class CategoryFactory
     {
         return new Category();
     }
-
 }

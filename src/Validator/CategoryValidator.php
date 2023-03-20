@@ -10,7 +10,6 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class CategoryValidator
 {
-
     public function __construct(private readonly ValidatorInterface $validator)
     {
     }

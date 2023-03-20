@@ -14,7 +14,6 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class DeleteEarningsController extends AbstractController
 {
-
     /**
      * @param EarningsRepositoryInterface $earningsRepository
      * @param UserRepositoryInterface $userRepository
@@ -24,7 +23,8 @@ class DeleteEarningsController extends AbstractController
         private readonly EarningsRepositoryInterface $earningsRepository,
         private readonly UserRepositoryInterface $userRepository,
         private readonly EarningsValidator $earningsValidator
-    ){}
+    ) {
+    }
 
     /**
      * @param Request $request
@@ -57,11 +57,15 @@ class DeleteEarningsController extends AbstractController
                     status: Response::HTTP_CREATED
                 );
             }
-            return $this->json(data: ['message' => 'No earnings with that ID.'],
-                status: Response::HTTP_BAD_REQUEST);
+            return $this->json(
+                data: ['message' => 'No earnings with that ID.'],
+                status: Response::HTTP_BAD_REQUEST
+            );
         } catch (\Exception $e) {
-            return $this->json(data: ['message' => 'Could not delete earnings.'],
-                status: Response::HTTP_BAD_REQUEST);
+            return $this->json(
+                data: ['message' => 'Could not delete earnings.'],
+                status: Response::HTTP_BAD_REQUEST
+            );
         }
     }
 }

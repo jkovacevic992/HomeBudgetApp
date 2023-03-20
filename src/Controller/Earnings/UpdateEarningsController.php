@@ -24,7 +24,8 @@ class UpdateEarningsController extends AbstractController
         private readonly EarningsRepositoryInterface $earningsRepository,
         private readonly UserRepositoryInterface $userRepository,
         private readonly EarningsValidator $earningsValidator
-    ){}
+    ) {
+    }
 
     /**
      * @param Request $request
@@ -45,10 +46,11 @@ class UpdateEarningsController extends AbstractController
         /** @var User $user */
         $user = $this->getUser();
         $earnings = $this->earningsRepository->find($data['id']);
-        if(!$earnings) {
+        if (!$earnings) {
             return $this->json(
                 data: ['message' => 'No earnings with that ID.'],
-                status: Response::HTTP_BAD_REQUEST);
+                status: Response::HTTP_BAD_REQUEST
+            );
         }
         if (array_key_exists(key: 'amount', array: $data)) {
             $diff = $data['amount'] - $earnings->getAmount();
@@ -73,13 +75,14 @@ class UpdateEarningsController extends AbstractController
         try {
             $this->earningsRepository->save(entity: $earnings, flush: true);
             return $this->json(
-                    data: ['message' => 'Successful earnings update!'],
-                    status: Response::HTTP_CREATED
-                );
+                data: ['message' => 'Successful earnings update!'],
+                status: Response::HTTP_CREATED
+            );
         } catch (Exception $e) {
             return $this->json(
                 data: ['message' => 'Error when trying to update earnings'],
-                status: Response::HTTP_BAD_REQUEST);
+                status: Response::HTTP_BAD_REQUEST
+            );
         }
     }
 }

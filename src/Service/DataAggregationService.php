@@ -34,7 +34,5 @@ class DataAggregationService
             $qb->setParameter('to', date('Y-m-d'));
         }
         return $qb->getQuery()->getArrayResult();
-
     }
-
 }

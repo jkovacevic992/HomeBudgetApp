@@ -16,6 +16,7 @@ class PostCategoryController extends AbstractController
 
     /**
      * @param CategoryRepositoryInterface $categoryRepository
+     * @param CategoryValidator $categoryValidator
      */
     public function __construct(private readonly CategoryRepositoryInterface $categoryRepository, private readonly CategoryValidator $categoryValidator)
     {

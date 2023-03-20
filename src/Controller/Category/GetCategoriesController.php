@@ -9,7 +9,10 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class GetCategoriesController extends AbstractController
 {
-    public function __construct(private CategoryRepositoryInterface $categoryRepository)
+    /**
+     * @param CategoryRepositoryInterface $categoryRepository
+     */
+    public function __construct(private readonly CategoryRepositoryInterface $categoryRepository)
     {
     }
 
@@ -17,6 +20,9 @@ class GetCategoriesController extends AbstractController
     public function get(): JsonResponse
     {
         $data = $this->categoryRepository->findAll();
-        return $this->json(data: $data);
+        if ($data) {
+            return $this->json(data: $data);
+        }
+        return $this->json('No categories found.');
     }
 }

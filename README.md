@@ -14,7 +14,7 @@ Documentation is available on route /api/doc, e.g. http://localhost:8000/api/doc
 
 Every user you create will start with balance of 5000.
 
-Users can create categories, expenses and earnings.
+Users can create, update or delete categories, expenses and earnings.
 
 Earnings and expenses are tied to users so when you request to see all expenses, they will be user specific.
 

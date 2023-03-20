@@ -22,7 +22,7 @@ nelmio_api_doc:
               scheme: bearer
               bearerFormat: JWT
         paths:
-          /register:
+          /api/register:
             post:
               tags:
                 - user
@@ -49,7 +49,7 @@ nelmio_api_doc:
                   description: Registered Successfully.
                 '400':
                   description: Could not register new user.
-          /login:
+          /api/login:
             post:
               tags:
                 - user
@@ -84,7 +84,7 @@ nelmio_api_doc:
                             example: "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpYXQiO..."
                 '401':
                   description: Invalid email or password
-          /add/category:
+          /api/add/category:
             post:
               tags:
                 - category
@@ -110,7 +110,7 @@ nelmio_api_doc:
                   description: Unauthorized access. Invalid JWT Token
                 '400':
                   description: Error when trying to save category.
-          /delete/category:
+          /api/delete/category:
             delete:
               tags:
                 - category
@@ -136,7 +136,7 @@ nelmio_api_doc:
                   description: Error when trying to delete category. Bad request data.
                 '401':
                   description: Unauthorized access. Invalid JWT Token.
-          /update/category:
+          /api/update/category:
             put:
               tags:
                 - category
@@ -166,7 +166,7 @@ nelmio_api_doc:
                   description: Error when trying to update category. Bad request data
                 '401':
                   description: Unauthorized access. Invalid JWT Token.
-          /categories:
+          /api/categories:
             get:
               tags:
                 - category
@@ -189,7 +189,7 @@ nelmio_api_doc:
                             name:
                               type: string
                               example: "Category Name"
-          /add/earnings:
+          /api/add/earnings:
             post:
               tags:
                 - earnings
@@ -221,7 +221,7 @@ nelmio_api_doc:
                   description: Bad request data. Error when trying to add earnings.
                 '401':
                   description: Unauthorized access. Invalid JWT Token.
-          /delete/earnings:
+          /api/delete/earnings:
             delete:
               tags:
                 - earnings
@@ -247,7 +247,7 @@ nelmio_api_doc:
                   description: Error when trying to delete earnings. Bad request data.
                 '401':
                   description: Unauthorized access. Invalid JWT Token.
-          /update/earnings:
+          /api/update/earnings:
             put:
               tags:
                 - earnings
@@ -281,7 +281,7 @@ nelmio_api_doc:
                   description: Bad request data
                 '401':
                   description: Unauthorized access
-          /earnings:
+          /api/earnings:
             get:
               tags:
                 - earnings
@@ -314,7 +314,7 @@ nelmio_api_doc:
                               example: 2023-03-17T15:36:04+01:00
                 '401':
                   description: Unauthorized access
-          /add/expense:
+          /api/add/expense:
             post:
               tags:
                 - expense
@@ -349,7 +349,7 @@ nelmio_api_doc:
                   description: Bad request
                 '401':
                   description: Unauthorized access
-          /delete/expense:
+          /api/delete/expense:
             delete:
               tags:
                 - expense
@@ -375,7 +375,7 @@ nelmio_api_doc:
                   description: Error when trying to delete expense. Bad request data.
                 '401':
                   description: Unauthorized access. Invalid JWT Token.
-          /update/expense:
+          /api/update/expense:
             put:
               tags:
                 - expense
@@ -412,7 +412,7 @@ nelmio_api_doc:
                   description: Bad request data
                 '401':
                   description: Unauthorized access
-          /expenses:
+          /api/expenses:
             get:
               tags:
                 - expense
@@ -480,7 +480,7 @@ nelmio_api_doc:
                                   example: Category 1
                 '401':
                   description: Unauthorized access
-          /summary:
+          /api/summary:
             get:
               tags:
                 - aggregation
@@ -520,6 +520,42 @@ nelmio_api_doc:
                             example: 503.55
                 '401':
                   description: Unauthorized access
+          /api/category-expenses:
+            get:
+              tags:
+                - aggregation
+              summary: Get total expenses per category in the last month or year
+              security:
+                - bearerAuth: [ ]
+              parameters:
+                - in: query
+                  name: period
+                  schema:
+                    type: string
+                    format: string
+                  description: Period for calculation
+                  example: "month"
+              responses:
+                '200':
+                  description: OK
+                  content:
+                    application/json:
+                      schema:
+                        type: object
+                        properties:
+                          category_name:
+                            type: string
+                            format: string
+                            example: "Food"
+                          total_expenses:
+                            type: number
+                            format: float
+                            example: 503.55
+                '400':
+                  description: Bad request data. Period can only be month or year.
+                '401':
+                  description: Unauthorized access
+
     areas: # to filter documented areas
       disable_default_routes: true
       path_patterns:

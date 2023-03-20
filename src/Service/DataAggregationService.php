@@ -35,4 +35,34 @@ class DataAggregationService
         }
         return $qb->getQuery()->getArrayResult();
     }
+
+    /**
+     * @param $data
+     * @param null $period
+     * @return array
+     */
+    public function getExpensesPerCategory($data, $period = null): array
+    {
+        $now = new \DateTimeImmutable('now');
+
+        $qb = $this->entityManager->createQueryBuilder();
+        $qb->select('c.name as category_name, SUM(e.amount) as total_expenses')
+            ->from('App\Entity\Expense', 'e')
+            ->join('e.category', 'c')
+            ->andWhere('e.createdAt <= :now')
+            ->setParameter('now', $now)
+            ->groupBy('c.id');
+
+        if ($period === 'month') {
+            $period = new \DateTimeImmutable('last month');
+            $qb->andWhere('e.createdAt >= :period')
+                ->setParameter('period', $period);
+        } elseif ($period === 'year') {
+            $period = new \DateTimeImmutable('last year');
+            $qb->andWhere('e.createdAt >= :period')
+                ->setParameter('period', $period);
+        }
+
+        return $qb->getQuery()->getArrayResult();
+    }
 }

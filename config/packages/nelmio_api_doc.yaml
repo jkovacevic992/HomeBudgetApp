@@ -4,8 +4,6 @@ nelmio_api_doc:
             title: Home Budget
             description: Home Budget App
             version: 1.0.0
-        servers:
-            - url: http://localhost:8000/api
         tags:
             - name: user
               description: Operations about user

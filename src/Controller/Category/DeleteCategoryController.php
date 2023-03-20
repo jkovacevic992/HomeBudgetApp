@@ -3,6 +3,7 @@
 namespace App\Controller\Category;
 
 use App\Repository\CategoryRepositoryInterface;
+use App\Validator\CategoryValidator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -15,7 +16,10 @@ class DeleteCategoryController extends AbstractController
     /**
      * @param CategoryRepositoryInterface $categoryRepository
      */
-    public function __construct(private CategoryRepositoryInterface $categoryRepository)
+    public function __construct(
+        private readonly CategoryRepositoryInterface $categoryRepository,
+        private readonly CategoryValidator $categoryValidator
+    )
     {}
 
     /**
@@ -27,6 +31,15 @@ class DeleteCategoryController extends AbstractController
     {
         $data = json_decode(json: $request->getContent(), associative: true);
 
+        $errors = $this->categoryValidator->validateDelete($data);
+
+        if (count($errors)) {
+            return $this->json(
+                data: $errors[0]->getMessage(),
+                status: Response::HTTP_BAD_REQUEST
+            );
+        }
+
         try {
             $category  = $this->categoryRepository->find(id: $data['id']);
             if ($category) {
@@ -37,11 +50,13 @@ class DeleteCategoryController extends AbstractController
                 );
             }
         } catch (\Exception $e) {
-            return $this->json(data: ['message' => 'Could not delete category.'],
+            return $this->json(
+                data: ['message' => 'Could not delete category.'],
                 status: Response::HTTP_BAD_REQUEST);
         }
 
-        return $this->json(data: ['message' => 'No category with that ID.'],
+        return $this->json(
+            data: ['message' => 'No category with that ID.'],
             status: Response::HTTP_BAD_REQUEST);
     }
 }

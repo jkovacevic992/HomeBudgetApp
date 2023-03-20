@@ -3,6 +3,7 @@
 namespace App\Controller\Category;
 
 use App\Repository\CategoryRepositoryInterface;
+use App\Validator\CategoryValidator;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -16,7 +17,10 @@ class UpdateCategoryController extends AbstractController
     /**
      * @param CategoryRepositoryInterface $categoryRepository
      */
-    public function __construct(private readonly CategoryRepositoryInterface $categoryRepository)
+    public function __construct(
+        private readonly CategoryRepositoryInterface $categoryRepository,
+        private readonly CategoryValidator $categoryValidator
+    )
     {
     }
 
@@ -29,19 +33,29 @@ class UpdateCategoryController extends AbstractController
     {
         $data = json_decode(json: $request->getContent(), associative: true);
 
-        $category = $this->categoryRepository->find(id: $data['id']);
-        $category->setName(name: $data['name']);
+        $errors = $this->categoryValidator->validateUpdate($data);
+        if (count($errors)) {
+            return $this->json(
+                data: $errors[0]->getMessage(),
+                status: Response::HTTP_BAD_REQUEST
+            );
+        }
 
         try {
-            $this->categoryRepository->save(entity: $category, flush: true);
+            $category = $this->categoryRepository->find(id: $data['id']);
+            if ($category) {
+                $category->setName(name: $data['name']);
+                $this->categoryRepository->save(entity: $category, flush: true);
+                return $this->json(
+                    data: ['message' => 'Successful category update!'],
+                    status: Response::HTTP_CREATED
+                );
+            }
+            return $this->json(data: ['message' => 'Could not find category.'],
+                status: Response::HTTP_BAD_REQUEST);
         } catch (Exception $e) {
             return $this->json(data: ['message' => 'Error when trying to update category'],
                 status: Response::HTTP_BAD_REQUEST);
         }
-
-        return $this->json(
-            data: ['message' => 'Successful category update!'],
-            status: Response::HTTP_CREATED
-        );
     }
 }

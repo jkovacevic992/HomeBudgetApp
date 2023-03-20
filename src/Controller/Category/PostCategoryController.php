@@ -4,6 +4,7 @@ namespace App\Controller\Category;
 
 use App\Factory\CategoryFactory;
 use App\Repository\CategoryRepositoryInterface;
+use App\Validator\CategoryValidator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -16,7 +17,7 @@ class PostCategoryController extends AbstractController
     /**
      * @param CategoryRepositoryInterface $categoryRepository
      */
-    public function __construct(private CategoryRepositoryInterface $categoryRepository)
+    public function __construct(private readonly CategoryRepositoryInterface $categoryRepository, private readonly CategoryValidator $categoryValidator)
     {
     }
 
@@ -29,6 +30,15 @@ class PostCategoryController extends AbstractController
     {
         $data = json_decode(json: $request->getContent(), associative: true);
 
+        $errors = $this->categoryValidator->validateAdd($data);
+
+        if (count($errors)) {
+            return $this->json(
+                data: $errors[0]->getMessage(),
+                status: Response::HTTP_BAD_REQUEST
+            );
+        }
+
         $category = CategoryFactory::create();
         $category->setName($data['name']);
 
@@ -36,7 +46,7 @@ class PostCategoryController extends AbstractController
             $this->categoryRepository->save(entity: $category, flush: true);
         } catch (\Exception $exception) {
             return $this->json(
-                data: ['message' => 'Error when trying to create category'],
+                data: ['message' => 'Error when trying to save category'],
                 status: Response::HTTP_BAD_REQUEST);
         }
 

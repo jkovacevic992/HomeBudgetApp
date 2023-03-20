@@ -55,6 +55,10 @@ class GetExpensesController extends AbstractController
             date: $date
         );
 
-        return $this->json(data: $expenses);
+        if ($expenses) {
+            return $this->json(data: $expenses);
+        }
+
+        return $this->json(data: 'No expenses for this user with the provided parameters.');
     }
 }

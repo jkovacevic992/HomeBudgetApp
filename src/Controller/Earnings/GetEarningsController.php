@@ -11,10 +11,16 @@ use Symfony\Component\Routing\Annotation\Route;
 class GetEarningsController extends AbstractController
 {
 
+    /**
+     * @param EarningsRepositoryInterface $earningsRepository
+     */
     public function __construct(private readonly EarningsRepositoryInterface $earningsRepository)
     {
     }
 
+    /**
+     * @return JsonResponse
+     */
     #[Route('/api/earnings', name: 'app_get_earnings', methods: ['GET'])]
     public function index(): JsonResponse
     {

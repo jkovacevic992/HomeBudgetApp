@@ -4,6 +4,8 @@ nelmio_api_doc:
             title: Home Budget
             description: Home Budget App
             version: 1.0.0
+        servers:
+          - url: /api
         tags:
             - name: user
               description: Operations about user
@@ -22,7 +24,7 @@ nelmio_api_doc:
               scheme: bearer
               bearerFormat: JWT
         paths:
-          /api/register:
+          /register:
             post:
               tags:
                 - user
@@ -49,7 +51,7 @@ nelmio_api_doc:
                   description: Registered Successfully.
                 '400':
                   description: Could not register new user.
-          /api/login:
+          /login:
             post:
               tags:
                 - user
@@ -84,7 +86,7 @@ nelmio_api_doc:
                             example: "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpYXQiO..."
                 '401':
                   description: Invalid email or password
-          /api/add/category:
+          /add/category:
             post:
               tags:
                 - category
@@ -110,7 +112,7 @@ nelmio_api_doc:
                   description: Unauthorized access. Invalid JWT Token
                 '400':
                   description: Error when trying to save category.
-          /api/delete/category:
+          /delete/category:
             delete:
               tags:
                 - category
@@ -136,7 +138,7 @@ nelmio_api_doc:
                   description: Error when trying to delete category. Bad request data.
                 '401':
                   description: Unauthorized access. Invalid JWT Token.
-          /api/update/category:
+          /update/category:
             put:
               tags:
                 - category
@@ -166,7 +168,7 @@ nelmio_api_doc:
                   description: Error when trying to update category. Bad request data
                 '401':
                   description: Unauthorized access. Invalid JWT Token.
-          /api/categories:
+          /categories:
             get:
               tags:
                 - category
@@ -189,7 +191,7 @@ nelmio_api_doc:
                             name:
                               type: string
                               example: "Category Name"
-          /api/add/earnings:
+          /add/earnings:
             post:
               tags:
                 - earnings
@@ -221,7 +223,7 @@ nelmio_api_doc:
                   description: Bad request data. Error when trying to add earnings.
                 '401':
                   description: Unauthorized access. Invalid JWT Token.
-          /api/delete/earnings:
+          /delete/earnings:
             delete:
               tags:
                 - earnings
@@ -247,7 +249,7 @@ nelmio_api_doc:
                   description: Error when trying to delete earnings. Bad request data.
                 '401':
                   description: Unauthorized access. Invalid JWT Token.
-          /api/update/earnings:
+          /update/earnings:
             put:
               tags:
                 - earnings
@@ -281,7 +283,7 @@ nelmio_api_doc:
                   description: Bad request data
                 '401':
                   description: Unauthorized access
-          /api/earnings:
+          /earnings:
             get:
               tags:
                 - earnings
@@ -314,7 +316,7 @@ nelmio_api_doc:
                               example: 2023-03-17T15:36:04+01:00
                 '401':
                   description: Unauthorized access
-          /api/add/expense:
+          /add/expense:
             post:
               tags:
                 - expense
@@ -349,7 +351,7 @@ nelmio_api_doc:
                   description: Bad request
                 '401':
                   description: Unauthorized access
-          /api/delete/expense:
+          /delete/expense:
             delete:
               tags:
                 - expense
@@ -375,7 +377,7 @@ nelmio_api_doc:
                   description: Error when trying to delete expense. Bad request data.
                 '401':
                   description: Unauthorized access. Invalid JWT Token.
-          /api/update/expense:
+          /update/expense:
             put:
               tags:
                 - expense
@@ -412,7 +414,7 @@ nelmio_api_doc:
                   description: Bad request data
                 '401':
                   description: Unauthorized access
-          /api/expenses:
+          /expenses:
             get:
               tags:
                 - expense
@@ -480,7 +482,7 @@ nelmio_api_doc:
                                   example: Category 1
                 '401':
                   description: Unauthorized access
-          /api/summary:
+          /summary:
             get:
               tags:
                 - aggregation
@@ -520,7 +522,7 @@ nelmio_api_doc:
                             example: 503.55
                 '401':
                   description: Unauthorized access
-          /api/category-expenses:
+          /category-expenses:
             get:
               tags:
                 - aggregation

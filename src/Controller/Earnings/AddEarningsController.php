@@ -6,6 +6,7 @@ use App\Entity\User;
 use App\Factory\EarningsFactory;
 use App\Repository\EarningsRepositoryInterface;
 use App\Repository\UserRepositoryInterface;
+use App\Validator\EarningsValidator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -20,7 +21,8 @@ class AddEarningsController extends AbstractController
      */
     public function __construct(
         private readonly EarningsRepositoryInterface $earningsRepository,
-        private readonly UserRepositoryInterface $userRepository
+        private readonly UserRepositoryInterface $userRepository,
+        private readonly EarningsValidator $validator
     ){}
 
     /**
@@ -34,6 +36,15 @@ class AddEarningsController extends AbstractController
 
         /** @var User $user */
         $user = $this->getUser();
+
+        $errors = $this->validator->validateAdd($data);
+
+        if (count($errors)) {
+            return $this->json(
+                data: $errors[0]->getMessage(),
+                status: Response::HTTP_BAD_REQUEST
+            );
+        }
 
         $earnings = EarningsFactory::create();
         $earnings->setAmount(amount: $data['amount']);

@@ -5,6 +5,7 @@ namespace App\Controller\Earnings;
 use App\Entity\User;
 use App\Repository\EarningsRepositoryInterface;
 use App\Repository\UserRepositoryInterface;
+use App\Validator\EarningsValidator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -17,10 +18,12 @@ class DeleteEarningsController extends AbstractController
     /**
      * @param EarningsRepositoryInterface $earningsRepository
      * @param UserRepositoryInterface $userRepository
+     * @param EarningsValidator $earningsValidator
      */
     public function __construct(
         private readonly EarningsRepositoryInterface $earningsRepository,
-        private readonly UserRepositoryInterface $userRepository
+        private readonly UserRepositoryInterface $userRepository,
+        private readonly EarningsValidator $earningsValidator
     ){}
 
     /**
@@ -31,6 +34,15 @@ class DeleteEarningsController extends AbstractController
     public function delete(Request $request): JsonResponse
     {
         $data = json_decode(json: $request->getContent(), associative: true);
+
+        $errors = $this->earningsValidator->validateDelete($data);
+
+        if (count($errors)) {
+            return $this->json(
+                data: $errors[0]->getMessage(),
+                status: Response::HTTP_BAD_REQUEST
+            );
+        }
 
         /** @var User $user */
         $user = $this->getUser();
@@ -45,12 +57,11 @@ class DeleteEarningsController extends AbstractController
                     status: Response::HTTP_CREATED
                 );
             }
+            return $this->json(data: ['message' => 'No earnings with that ID.'],
+                status: Response::HTTP_BAD_REQUEST);
         } catch (\Exception $e) {
             return $this->json(data: ['message' => 'Could not delete earnings.'],
                 status: Response::HTTP_BAD_REQUEST);
         }
-
-        return $this->json(data: ['message' => 'No earnings with that ID.'],
-            status: Response::HTTP_BAD_REQUEST);
     }
 }

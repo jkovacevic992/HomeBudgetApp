@@ -5,6 +5,7 @@ namespace App\Controller\Earnings;
 use App\Entity\User;
 use App\Repository\EarningsRepositoryInterface;
 use App\Repository\UserRepositoryInterface;
+use App\Validator\EarningsValidator;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -17,10 +18,12 @@ class UpdateEarningsController extends AbstractController
     /**
      * @param EarningsRepositoryInterface $earningsRepository
      * @param UserRepositoryInterface $userRepository
+     * @param EarningsValidator $earningsValidator
      */
     public function __construct(
         private readonly EarningsRepositoryInterface $earningsRepository,
-        private readonly UserRepositoryInterface $userRepository
+        private readonly UserRepositoryInterface $userRepository,
+        private readonly EarningsValidator $earningsValidator
     ){}
 
     /**
@@ -32,9 +35,21 @@ class UpdateEarningsController extends AbstractController
     {
         $data = json_decode(json: $request->getContent(), associative: true);
 
+        $errors = $this->earningsValidator->validateUpdate($data);
+        if (count($errors)) {
+            return $this->json(
+                data: $errors[0]->getMessage(),
+                status: Response::HTTP_BAD_REQUEST
+            );
+        }
         /** @var User $user */
         $user = $this->getUser();
         $earnings = $this->earningsRepository->find($data['id']);
+        if(!$earnings) {
+            return $this->json(
+                data: ['message' => 'No earnings with that ID.'],
+                status: Response::HTTP_BAD_REQUEST);
+        }
         if (array_key_exists(key: 'amount', array: $data)) {
             $diff = $data['amount'] - $earnings->getAmount();
             if ($diff !== 0) {
@@ -57,14 +72,14 @@ class UpdateEarningsController extends AbstractController
 
         try {
             $this->earningsRepository->save(entity: $earnings, flush: true);
+            return $this->json(
+                    data: ['message' => 'Successful earnings update!'],
+                    status: Response::HTTP_CREATED
+                );
         } catch (Exception $e) {
             return $this->json(
                 data: ['message' => 'Error when trying to update earnings'],
                 status: Response::HTTP_BAD_REQUEST);
         }
-        return $this->json(
-            data: ['message' => 'Successful earnings update!'],
-            status: Response::HTTP_CREATED
-        );
     }
 }

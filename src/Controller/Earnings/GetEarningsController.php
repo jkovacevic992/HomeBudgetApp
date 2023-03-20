@@ -23,6 +23,9 @@ class GetEarningsController extends AbstractController
 
         $earnings = $this->earningsRepository->findByUserId($user->getId());
 
-        return $this->json(data: $earnings);
+        if ($earnings) {
+            return $this->json(data: $earnings);
+        }
+        return $this->json(data: 'No earnings found for user.');
     }
 }
